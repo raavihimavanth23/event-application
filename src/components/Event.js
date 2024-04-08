@@ -8,6 +8,7 @@ const Event = ({event, status, user}) => {
   const [isExpired, setExpired] = useState(false)
   const [finalAmount, setFinalAmount] = useState(event.event_price)
   const [openAccord, setOpenAccord] = useState(false)
+  const [showRegisterModal, setShowRegisterModal] = useState(false)
   const [couponDetails, setCouponDetails] = useState({
     "coupon_code": "FIRST50",
     "discount_type": "percentage",
@@ -45,9 +46,10 @@ const Event = ({event, status, user}) => {
 
     const handleRegisterBtn = () => {
         console.log('handle register event')
-       render (<EventRegisterModal event={event} show={true} user={user}/>);
-        // setShowRegisterModal(true);
+      //  render (<EventRegisterModal event={event} show={true} user={user}/>);
+        setShowRegisterModal(!showRegisterModal);
     } 
+
 
     const handleCancelRegistration = async() => {
         console.log('handle cancel registration: ',event)
@@ -75,7 +77,7 @@ const Event = ({event, status, user}) => {
       />
     </a> */}
 
-{/* {showRegisterModal && <EventRegisterModal event={event} show={true}/>} */}
+{showRegisterModal && <EventRegisterModal event={event} show={true} user={user} handleClose = {handleRegisterBtn}/>}
     <article className="relative isolate  font-semibold flex flex-col justify-end overflow-hidden  h-60 max-h-60 w-full  mx-auto">
       <img
         src={event.event_img}

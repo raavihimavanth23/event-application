@@ -4,10 +4,13 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { EventService } from '../services/Service';
 import { InputWithButton } from './InputWithButton';
 import {SessionContext} from './Contexts'
-function EventRegisterModal({show,event,user, ...props }) {
+function EventRegisterModal({show,event,user, handleClose,...props }) {
   const [modal, setModal] = useState(show);
   const [couponCode, setCouponCode] = useState()
-  const toggle = () => setModal(!modal);
+  const toggle = () => {
+    setModal(!modal);
+    handleClose();
+  }
   const [openAccord, setOpenAccor] = useState(false)
 
   const handleCouponChange = (coupon) => {
