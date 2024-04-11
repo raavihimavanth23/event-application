@@ -15,7 +15,7 @@ const CancelledEvents = () => {
   },[]);
 
   const getAllEvents = async() => {
-   const response = await EventService().getUserEvents(JSON.parse(user).username);
+   const response = await EventService().getUserEvents(JSON.parse(user).email);
 
    console.log('register user events: ', response)
    if(response.status==='SUCCESS' && response.data) {

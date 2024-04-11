@@ -18,7 +18,7 @@ function EventRegisterModal({show,event,user, handleClose,...props }) {
   }
   const handleRegisterBtn = async() =>{
     console.log('handle register btn', user)
-    const response = await EventService().registerUserEvent({'coupon_code':couponCode,'event_id': event.event_id,'user_id': JSON.parse(user).username });
+    const response = await EventService().registerUserEvent({'coupon_code':couponCode,'event_id': event.event_id,'user_id': JSON.parse(user).email });
     if(response && response.status==='SUCCESS') {
         alert('Event registered successfully')
         toggle();

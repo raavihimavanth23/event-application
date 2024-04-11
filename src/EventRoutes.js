@@ -11,8 +11,8 @@ import RegisteredEvents from './components/RegisteredEvents'
 export const EventRoutes = () => {
   return (
     <Routes>
-      <Route path="/login" element={<Login mode="Login"/>}/>
-      <Route path="/sign-up" element={<Login  mode="Register"/>}/>
+      <Route path="/login" element={<Login mode="LOGIN"/>}/>
+      <Route path="/register" element={<Login  mode="REGISTER"/>}/>
       <Route path="/" element={<PrivateRoute activeTab={"HOME"}><Home /></PrivateRoute>} />
       <Route path="/events" element={<PrivateRoute activeTab={"HOME"}><Home /></PrivateRoute>} />
       {/* <Route path="/events/all-events" element={<PrivateRoute activeTab={"ALL_EVENTS"}><Dashboard /></PrivateRoute>} /> */}
