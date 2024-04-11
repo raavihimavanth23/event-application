@@ -14,7 +14,7 @@ const PrivateRoute = ({ children, ...props}) => {
         {
             isLoggedIn && user ?
             <>
-                <SideBar {...props} />
+                <SideBar user = {user} {...props} />
                 {children}
             </>
             : <Navigate to="/login"/>
