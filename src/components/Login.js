@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom';
 import { EventService } from '../services/Service';
+import { AlertManager } from './AlertManager';
 import { SessionContext } from './Contexts';
 
 const Login = (props) => {
-  const [user, setUser] = useState()
+  const [user, setUser] = useState();
+  const [alert, setAlert] = useState(undefined)
   const sessionContext = useContext(SessionContext)
   const navigate = useNavigate();
   useEffect(() => {
@@ -17,13 +19,13 @@ const Login = (props) => {
       e.preventDefault()
       console.log('handle login, ', user);
       if(!user){
-        alert('Email and Password required')
+        setAlert({message: 'Email and Password required'})
       } else if(user.email===undefined || user.email==='' || (user.email.trim()).length <=0) {
-        alert('Invalid Email')
+        setAlert({message:'Invalid Email'})
       } else if(user.password===undefined || user.password==='' || (user.password.trim()).length <=0) {
-        alert('Invalid Password')
+        setAlert({message:'Invalid Password'})
       } else if(props.mode ==='REGISTER' && (user.username===undefined || user.username==='' || (user.username.trim()).length <=0)) {
-        alert('Invalid Username')
+        setAlert({message:'Invalid Username'})
       } else {
         const response =await EventService().login(user, props.mode.toLowerCase());
         props.mode ==='LOGIN' ? doLogin(response) : doRegister(response);
@@ -38,21 +40,22 @@ const Login = (props) => {
             } else {
               localStorage.setItem('user', JSON.stringify(user));
             }
+            setAlert({message: 'Authentication Success', type:'success'});
             localStorage.setItem('isLoggedIn',"true");
             localStorage.setItem('token','token');
             window.location.href="/events"
         } else {
-          alert(response.message);
+          setAlert({message:response.message});
         } 
     }
 
     const doRegister = (response) => {
         if(response && response.status==='SUCCESS') {
-          alert(response.message)
+          setAlert({message: response.message, type:'success'})
           setUser({})
           window.location.href="/login"
         } else {
-          alert(response.message);
+          setAlert({message: response.message});
         } 
     }
   return (
@@ -68,6 +71,7 @@ const Login = (props) => {
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                  {props.mode === 'LOGIN' ? 'Sign in to your account' : 'Register with us ' }
               </h1>
+             {alert && alert.message && <AlertManager message={alert.message} type={alert.type? alert.type :'error'}/> }
               <form className="space-y-4 md:space-y-6" onSubmit={handleLogin} >
                   <div>
                       <label for="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>

@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useState } from 'react'
 import { EventService } from '../services/Service';
 import Event from './Event';
 import {SessionContext} from './Contexts'
+import { AlertManager } from './AlertManager';
 const RegisteredEvents = () => {
   const {user} = useContext(SessionContext)
-
+  const [alert, setAlert] = useState()
   const [events, setEvents] = useState([])
   useEffect(() => {
     console.log('user from session :', JSON.parse(user).username)
@@ -19,7 +20,7 @@ const RegisteredEvents = () => {
      eventsObj =  eventsObj.filter(event => event?.status === 'P')
       setEvents(eventsObj);
    } else {
-    alert(response.message);
+    setAlert({message: response.message});
    }
   }
     const events1 = [
@@ -52,10 +53,12 @@ const RegisteredEvents = () => {
     <React.Fragment>
         <div className="p-4 sm:ml-64">
         <div className="p-4 h-full rounded-lg dark:border-gray-700">
-          <div className=" grid grid-cols-1  w-full md:grid-cols-3 sm:grid-cols-1 items-start">
+        {alert && alert.message && <AlertManager {...alert}/> }
+          <div className=" grid grid-cols-1 mt-5  w-full md:grid-cols-3 sm:grid-cols-1 items-start">
+          
             {events &&
               events.map((event) => (
-                <Event event = {event} key={event.event_id} status={"P"} user={user}/>
+                <Event event = {event} key={event.event_id} status={"P"} user={user} setAlert={setAlert}/>
               ))}
           </div>
         </div>

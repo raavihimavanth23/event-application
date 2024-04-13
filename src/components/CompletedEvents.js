@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useState } from 'react'
 import Event from './Event'
 import {SessionContext} from './Contexts'
 import { EventService } from '../services/Service'
+import { AlertManager } from './AlertManager'
 const CompletedEvents = () => {
 
   const {user} = useContext(SessionContext)
-
+  const [alert, setAlert] = useState()
   const [events, setEvents] = useState([])
   useEffect(() => {
     console.log('user from session :', JSON.parse(user).username)
@@ -17,10 +18,10 @@ const CompletedEvents = () => {
    console.log('register user events: ', response)
    if(response.status==='SUCCESS' && response.data) {
       let eventsObj = response.data;
-     eventsObj =  eventsObj.filter(event => event?.status === 'C')
+     eventsObj =  eventsObj.filter(event => event?.status === 'P' && (new Date(event?.event_date) <  new Date()))
       setEvents(eventsObj);
    } else {
-    alert(response.message);
+    setAlert({message: response.message});
    }
   }
     const events1 = [
@@ -53,10 +54,11 @@ const CompletedEvents = () => {
     <React.Fragment>
         <div className="p-4 sm:ml-64">
         <div className="p-4 h-full rounded-lg dark:border-gray-700">
-          <div className=" grid grid-cols-1  w-full md:grid-cols-3 sm:grid-cols-1 items-start">
+          {alert && alert.message && <AlertManager {...alert}/> }
+          <div className=" grid grid-cols-1  mt-5 w-full md:grid-cols-3 sm:grid-cols-1 items-start">
             {events &&
               events.map((event) => (
-                <Event event = {event} key={event.event_id} status={"C"} user={user} />
+                <Event event = {event} key={event.event_id} status={"C"} user={user} setAlert={setAlert}/>
               ))}
           </div>
         </div>

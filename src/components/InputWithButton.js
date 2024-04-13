@@ -2,17 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Input, Button, Accordion, AccordionHeader, AccordionBody } from "@material-tailwind/react";
 import { EventService } from "../services/Service";
  
-export function InputWithButton({handleCouponChange, finalAmt, handleFinalAmount}) {
+export function InputWithButton({handleCouponChange, finalAmt, handleCouponDetails, setAlert}) {
   const [couponCode, setCouponCode] = React.useState("");
   const [finalAmount, setFinalAmount] = useState(finalAmt)
+  const [couponDetails, setCouponDetails] = useState()
   const onChange = ({ target }) => {
     setCouponCode(target.value);
     handleCouponChange(target.value)
     // setCouponDetails(undefined)
   }
-  
-  const [couponDetails, setCouponDetails] = useState()
-
 
   const getCouponDetails = async () => {
     const cd = {
@@ -21,33 +19,38 @@ export function InputWithButton({handleCouponChange, finalAmt, handleFinalAmount
       "discount_amount": "50",
       "coupon_id": "FIRST50",
       "description": "50% off for FIRST EVENT",
-      "validity": "2024-12-31"
+      "validity": "2024-04-31"
   }
     const response = await EventService().getCouponDetails(couponCode);
     if(response) {
-        setCouponDetails(couponDetails)
+        setCouponDetails(response)
+        handleCouponDetails(response)
     } else {
-      alert("Coupon Details Not Found")
+      setAlert({message: "Invalid Coupon, Coupon Details Not Found!"})
       setCouponDetails(cd)
+      handleCouponDetails(cd)
     }
     const discount = couponDetails?.discount_amount ? couponDetails.discount_amount : 0;
     const finalAmount1 = (finalAmt - finalAmt*discount/100 )
     setFinalAmount(finalAmount1)
+    
   }
 
   const handleApplyCoupon =() => {
         getCouponDetails();
+        
   }
 
   return (
 
     <>
-    <div className="relative flex w-full max-w-[24rem]">
+    <div className="relative  mt-3 flex w-full max-w-[24rem]">
       <Input
         type="text"
         label="CouponCode"
         value={couponCode}
         onChange={onChange}
+        disabled ={couponCode && couponDetails}
         className="pr-20 text-uppercase"
         containerProps={{
           className: "min-w-0",

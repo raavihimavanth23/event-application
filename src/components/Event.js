@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { EventService } from '../services/Service';
 import EventRegisterModal from './EventRegisterModal';
 
-const Event = ({event, status, user}) => {
+const Event = ({event, status, user, setAlert}) => {
   const [isExpired, setExpired] = useState(false)
   const [finalAmount, setFinalAmount] = useState(event.event_price)
   const [openAccord, setOpenAccord] = useState(false)
@@ -20,12 +20,12 @@ const Event = ({event, status, user}) => {
 
 
   const fetchCouponDetails = async () => {
-    // const response = await EventService().getCouponDetails(event.coupon_code);
-    // if(response) {
-    //     setCouponDetails(response)
-    // } else {
-    //   alert("Coupon Details Not Found")
-    // }
+    const response = await EventService().getCouponDetails(event.coupon_code);
+    if(response) {
+        setCouponDetails(response)
+    } else {
+      setAlert({message:"Coupon Details Not Found"})
+    }
 
     const discount = couponDetails?.discount_amount ? couponDetails.discount_amount : 0;
     const finalAmount = (event.event_price - event.event_price*discount/100 )
@@ -55,9 +55,10 @@ const Event = ({event, status, user}) => {
         console.log('handle cancel registration: ',event)
      const resp =  await EventService().cancelUserEvent(event);
           if(resp && resp.status==='SUCCESS'){
-            alert('event cancelled successfully')
+            setAlert({message:'event cancelled successfully', type:'success'})
+            window.location.reload()
           } else {
-            alert(resp?.data?.message)
+            setAlert({message:resp?.data?.message})
           }
     }
 
@@ -95,11 +96,7 @@ const Event = ({event, status, user}) => {
     </article>
     <div className="mx-3 pb-5">
         <h5 className="text-md mt-2 tracking-tight text-slate-500 dark:text-slate-500">
-          {event.event_description}Hyderabad Business Network the
-          ultimate meetup for professionals seeking to connect
-          exchange sales opportunities expand their business
-          networks and engage in insightful discussions on
-          industry-related topics.
+          {event.event_description}
         </h5>
       <div className="flex items-center justify-between text-muted mt-2.5 mb-1 font-semibold text-slate-700 dark:text-slate-700">
         <span className='flex items-center flex-row'>
