@@ -9,14 +9,7 @@ const Event = ({event, status, user, setAlert}) => {
   const [finalAmount, setFinalAmount] = useState(event.event_price)
   const [openAccord, setOpenAccord] = useState(false)
   const [showRegisterModal, setShowRegisterModal] = useState(false)
-  const [couponDetails, setCouponDetails] = useState({
-    "coupon_code": "FIRST50",
-    "discount_type": "percentage",
-    "discount_amount": "50",
-    "coupon_id": "FIRST50",
-    "description": "50% off for FIRST EVENT",
-    "validity": "2024-12-31"
-  })
+  const [couponDetails, setCouponDetails] = useState()
 
 
   const fetchCouponDetails = async () => {
@@ -129,10 +122,10 @@ const Event = ({event, status, user, setAlert}) => {
             <span className='border-none'>Coupon: {event.coupon_code}</span>
         </AccordionHeader>
         <AccordionBody>
-            <p>CouponCode : {couponDetails.coupon_code}</p>
-            <p>description: {couponDetails.description}</p>
-            <p>discount_amount : {couponDetails.discount_amount}</p>
-            <p>validity : {couponDetails.validity}</p>
+            <p>CouponCode : {couponDetails?.coupon_code}</p>
+            <p>description: {couponDetails?.description}</p>
+            <p>discount_amount : {couponDetails?.discount_amount}</p>
+            <p>validity : {couponDetails?.validity}</p>
             
         </AccordionBody>
       </Accordion> }
