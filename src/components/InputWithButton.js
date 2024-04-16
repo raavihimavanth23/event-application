@@ -27,10 +27,10 @@ export function InputWithButton({handleCouponChange, finalAmt, handleCouponDetai
         handleCouponDetails(response)
     } else {
       setAlert({message: "Invalid Coupon, Coupon Details Not Found!"})
-      setCouponDetails(cd)
-      handleCouponDetails(cd)
+      setCouponDetails(undefined)
+      handleCouponDetails(undefined)
     }
-    const discount = couponDetails?.discount_amount ? couponDetails.discount_amount : 0;
+    const discount = response?.discount_amount ? response.discount_amount : 0;
     const finalAmount1 = (finalAmt - finalAmt*discount/100 )
     setFinalAmount(finalAmount1)
     
@@ -80,15 +80,15 @@ export function InputWithButton({handleCouponChange, finalAmt, handleCouponDetai
             <span className=''>Coupon Details for {couponCode}</span>
         </AccordionHeader>
         <AccordionBody>
-            <p>CouponCode : {couponDetails.coupon_code}</p>
-            <p>description: {couponDetails.description}</p>
-            <p>discount_amount : {couponDetails.discount_amount}</p>
-            <p>validity : {couponDetails.validity}</p>
+            <p>CouponCode : {couponDetails?.coupon_code}</p>
+            <p>description: {couponDetails?.description}</p>
+            <p>discount_amount : {couponDetails?.discount_amount}</p>
+            <p>validity : {couponDetails?.validity}</p>
             
         </AccordionBody>
       </Accordion> }
       <div>Total Amount: {finalAmt}</div>
-      <div> Discount: {couponDetails ? couponDetails.discount_amount : 0}%</div>
+      <div> Discount: {couponDetails ? couponDetails?.discount_amount : 0}%</div>
       <div>Amount Payable: {finalAmount}</div>
       </>
   );
