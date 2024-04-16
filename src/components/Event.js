@@ -20,7 +20,7 @@ const Event = ({event, status, user, setAlert}) => {
       setAlert({message:"Coupon Details Not Found"})
     }
 
-    const discount = couponDetails?.discount_amount ? couponDetails.discount_amount : 0;
+    const discount = response?.discount_amount ? response.discount_amount : 0;
     const finalAmount = (event.event_price - event.event_price*discount/100 )
     setFinalAmount(finalAmount)
   }
